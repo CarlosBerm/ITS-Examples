@@ -19,7 +19,7 @@ except TypeError:
 #Create OpenAI client
 client = OpenAI(
     api_key=os.environ['OPENAI_API_KEY'],
-    base_url=os.environ.get('OPENAI_API_BASE')
+    base_url=os.environ['OPENAI_API_BASE']
 )
 
 # Define the Pydantic model for the structured output
