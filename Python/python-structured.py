@@ -1,8 +1,7 @@
 """Structured outputs make a model follow a JSON Schema definition that you provide as part of your inference API call."""
-
-from openai import AzureOpenAI
-import openai
 import os
+from openai import OpenAI
+import openai
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
@@ -17,12 +16,10 @@ except TypeError:
     print('Unable to load .env file.')
     quit()
 
-#Create Azure client
-client = AzureOpenAI(
-    api_key=os.environ['OPENAI_API_KEY'],  
-    api_version=os.environ['API_VERSION'],
-    azure_endpoint = os.environ['OPENAI_API_BASE'],
-    organization = os.environ['OPENAI_ORGANIZATION']
+#Create OpenAI client
+client = OpenAI(
+    api_key=os.environ['OPENAI_API_KEY'],
+    base_url=os.environ.get('OPENAI_API_BASE')
 )
 
 # Define the Pydantic model for the structured output
@@ -55,7 +52,7 @@ messages=[
 
 # Send a completion request.
 response = client.beta.chat.completions.parse(
-    model="gpt-4o",
+    model=os.environ['MODEL'],
     messages=messages,
     temperature=0,
     tools=tools

@@ -1,6 +1,7 @@
 # Sample Q&A RAG application over a text data source
 
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain.chat_models import ChatOpenAI
+from langchain.embeddings import OpenAIEmbeddings
 import os
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -24,20 +25,13 @@ except TypeError:
     print('Unable to load .env file.')
     quit()
 
-endpoint = os.environ['OPENAI_API_BASE']
-
-#Remove OPENAI_API_BASE from the environment variables as this causes an error with AzureOpenAIEmbeddings
-if "OPENAI_API_BASE" in os.environ:
-    del os.environ["OPENAI_API_BASE"]
 
 # Define llm parameters
-llm = AzureChatOpenAI(
-    deployment_name=os.environ['MODEL'],
-    openai_api_version=os.environ['API_VERSION'],
+llm = ChatOpenAI(
+    model_name=os.environ['MODEL'],
     openai_api_key=os.environ['OPENAI_API_KEY'],
-    azure_endpoint=endpoint,
-    openai_organization=os.environ['OPENAI_ORGANIZATION']
-    )
+    openai_organization=os.environ.get('OPENAI_ORGANIZATION')
+)
 
 # Replace with the document(s) you wish to use
 print("Loading document...")
@@ -51,12 +45,10 @@ splits = text_splitter.split_documents(docs)
 print("Document loaded.")
 
 # Settings for embeddings
-embeddings = AzureOpenAIEmbeddings(
-    azure_endpoint=endpoint, 
-    openai_api_version=os.environ['API_VERSION'],  
-    openai_api_key=os.environ['OPENAI_API_KEY'],   
-    openai_organization=os.environ['OPENAI_ORGANIZATION'],
-    model="text-embedding-3-small" 
+embeddings = OpenAIEmbeddings(
+    model="text-embedding-3-small",
+    openai_api_key=os.environ['OPENAI_API_KEY'],
+    openai_organization=os.environ.get('OPENAI_ORGANIZATION')
 )
 
 print("Embedding documents...")

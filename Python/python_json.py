@@ -1,5 +1,5 @@
-from openai import AzureOpenAI
 import os
+from openai import OpenAI
 from dotenv import load_dotenv
 
 #Sets the current working directory to be the same as the file.
@@ -13,12 +13,10 @@ except TypeError:
     print('Unable to load .env file.')
     quit()
 
-#Create Azure client
-client = AzureOpenAI(
-    api_key=os.environ['OPENAI_API_KEY'],  
-    api_version=os.environ['API_VERSION'],
-    azure_endpoint = os.environ['OPENAI_API_BASE'],
-    organization = os.environ['OPENAI_ORGANIZATION']
+#Create OpenAI client
+client = OpenAI(
+    api_key=os.environ['OPENAI_API_KEY'],
+    base_url=os.environ.get('OPENAI_API_BASE')
 )
 
 #Create Query

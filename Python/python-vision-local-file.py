@@ -1,5 +1,5 @@
-from openai import AzureOpenAI
 import os
+from openai import OpenAI
 from dotenv import load_dotenv
 import base64
 from mimetypes import guess_type
@@ -16,15 +16,13 @@ except TypeError:
     quit()
 
 # Path of the image to be analyzed.
-image_path = ''
+image_path = '' # Replace with your local image path
 imagedata = base64.b64encode(open(image_path, 'rb').read()).decode('ascii')
 
-#Create Azure client
-client = AzureOpenAI(
-    api_key=os.environ['OPENAI_API_KEY'],  
-    api_version=os.environ['API_VERSION'],
-    azure_endpoint = os.environ['OPENAI_API_BASE'],
-    organization = os.environ['OPENAI_ORGANIZATION']
+#Create OpenAI client
+client = OpenAI(
+    api_key=os.environ['OPENAI_API_KEY'],
+    base_url=os.environ['OPENAI_API_BASE']
 )
 # print(data_url)
 #Create Query

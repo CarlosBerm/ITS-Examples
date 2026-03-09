@@ -1,5 +1,5 @@
-from langchain_openai import AzureChatOpenAI
 import os
+from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 
 # Sets the current working directory to be the same as the file.
@@ -14,12 +14,10 @@ except TypeError:
     quit()
 
 # Define llm parameters
-llm = AzureChatOpenAI(
-    deployment_name=os.environ['MODEL'],
-    openai_api_version=os.environ['API_VERSION'],
+llm = ChatOpenAI(
+    model_name=os.environ['MODEL'],
     openai_api_key=os.environ['OPENAI_API_KEY'],
-    azure_endpoint = os.environ['OPENAI_API_BASE'],
-    openai_organization=os.environ['OPENAI_ORGANIZATION']
+    openai_api_base = os.environ['OPENAI_API_BASE']
 )
 
 #Create Query
@@ -32,5 +30,4 @@ messages = [
 response = llm.invoke(messages)
 
 # Get and print response
-response = llm.invoke(messages)
 print(response.content)

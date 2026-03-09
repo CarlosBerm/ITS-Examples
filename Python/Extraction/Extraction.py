@@ -1,4 +1,4 @@
-from openai import AzureOpenAI
+from openai import OpenAI 
 import os
 from dotenv import load_dotenv
 
@@ -10,12 +10,10 @@ if not load_dotenv('.env'):
     print('Unable to load .env file.')
     quit()
 
-# Create Azure client
-client = AzureOpenAI(
-    api_key=os.environ['OPENAI_API_KEY'],  
-    api_version=os.environ['API_VERSION'],
-    azure_endpoint = os.environ['OPENAI_API_BASE'],
-    organization = os.environ['OPENAI_ORGANIZATION']
+# Create OpenAI client
+client = OpenAI(
+    api_key=os.environ['OPENAI_API_KEY'],
+    organization=os.environ.get('OPENAI_ORGANIZATION')
 )
 
 # Returns a list of entities based on the label given.
@@ -59,7 +57,7 @@ EXAMPLE:
 --"""
 
 def system_message(labels_list):
-    #print(type(labels_list))
+    # print(type(labels_list))
     types=", ".join(labels_list)
     return f"""
 You are an expert in Natural Language Processing. Your task is to identify common Named Entities (NER) in a given text.
@@ -75,7 +73,7 @@ TASK:
     Text: {text}
 """
 
-# Call Azure API
+# Call API
 def run_ner_task(labels_list, text):
     messages = [
           {"role": "system", "content": system_message(labels_list)},
