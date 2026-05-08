@@ -16,7 +16,7 @@ const apiKey = ""
 //Your shortcode.
 const organization = ""
 if (!apiKey) {
-  throw new Error('The AZURE_OPENAI_API_KEY environment variable is missing or empty.');
+  throw new Error('The OPENAI_API_KEY environment variable is missing or empty.');
 }
 
 if (!organization) {
