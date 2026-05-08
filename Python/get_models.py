@@ -20,7 +20,7 @@ client = OpenAI(
 
 models = client.models.list()
 
-# Group models by provider prefix (e.g., @google/, @anthropic/)
+# Group models by provider
 groups = {}
 for model in models.data:
     model_id = model.id
