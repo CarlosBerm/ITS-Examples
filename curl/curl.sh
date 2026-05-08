@@ -1,6 +1,6 @@
 #!/bin/bash
-export API_KEY="X"
-export API_BASE="X"
+export API_KEY="esCbVum3CEmx3fc9illj8YQoVI1i"
+export API_BASE="https://api.toolkit.umgpt.umich.edu/v1"
 export API_VERSION="X"
 export ORGANIZATION="X"
 export DEPLOYMENT_ID="gpt-4.1"

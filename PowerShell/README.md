@@ -7,5 +7,5 @@ Note that these parameters may be represented by slightly different naming conve
 
 model #model name - available models can be accessed by running the get_models.py file in the Python folder.
 API gateway URL #API endpoint
-API_KEY #your API key  
+API_KEY #your API key
 
