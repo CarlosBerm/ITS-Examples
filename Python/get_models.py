@@ -2,10 +2,9 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-#Sets the current working directory to be the same as the file.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-#Load environment file for secrets.
+#Load .env
 try:
     if load_dotenv('.env') is False:
         raise TypeError
@@ -24,8 +23,8 @@ models = client.models.list()
 groups = {}
 for model in models.data:
     model_id = model.id
-    if '/' in model_id:
-        provider, name = model_id.split('/', 1)
+    if '-' in model_id:
+        provider, name = model_id.split('-', 1)
         provider = provider.lstrip('@').title()
     else:
         provider = 'General'
