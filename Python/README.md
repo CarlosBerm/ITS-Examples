@@ -1,5 +1,5 @@
 # Examples
-This is a collection of example code for accessing the U-M GPT Toolkit API service.  
+This is a collection of example Python code for accessing the U-M GPT Toolkit API service.  
 
 **Required Parameters**   
 
