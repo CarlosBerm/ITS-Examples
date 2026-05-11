@@ -17,6 +17,7 @@ cp .env.example .env
 | `MODEL` | Model to use for text examples |
 | `IMAGE_MODEL` | Model to use for image generation (`python-image.py`) |
 | `EMBEDDING_MODEL` | Model to use for embeddings (`python-embeddings.py`) |
+| `REASONING_MODEL` | Model to use for reasoning (`python-reasoning.py`) |
 
 Run `get_models.py` to see all available model names.
 

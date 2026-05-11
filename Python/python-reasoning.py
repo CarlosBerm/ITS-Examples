@@ -32,7 +32,7 @@ client = OpenAI(
 # reasoning.effort controls how much internal thinking the model does.
 # Options: "low" (fast), "medium" (balanced), "high" (most thorough).
 response = client.responses.create(
-    model=os.environ['MODEL'],
+    model=os.environ['REASONING_MODEL'],
     instructions="You are a helpful assistant. Always say GO BLUE! at the end of your response.",
     input="Explain step by step. Where is the University of Michigan?",
     reasoning={"effort": "high"},
