@@ -14,7 +14,7 @@ The **API Config** tab then displays an overview of all the events using that to
 
 # Navigating the U-M Maizey API Documentation
 
-After opening your project, click the **API Config** tab and then click the **Documentation** button.
+After opening your project, click the **API Config** tab and then click the **Documentation** button. Alternatively, you can acccess the documentation at https://umgpt.umich.edu/api/schema-public/swagger-ui/. 
 
 ![Getting Started](../docs/img/4documentation.png)
 
@@ -42,3 +42,42 @@ The output will contain the response from your Maizey.
 If you go back to your Maizey project, you will see that your query and response will also be reflected as a new chat. Remember that there is no endpoint for managing or deleting conversations or messages at this time.
 
 ![Getting Started](../docs/img/11maizey_interface.png)
+
+# Powershell and Python Examples
+
+In this folder, we have also provided example Powershell and Python scripts for interacting with the Maizey API. 
+
+## Powershell Example
+
+1. Open a PowerShell terminal and navigate to the Maizey API folder:  
+
+    ```
+    cd "ITS-Examples/Maizey API"
+    ```               
+
+2. Import the module: 
+
+    ```
+    Import-Module ./maizeyApi.psm1 
+    ```    
+
+3. Call the function with your values:   
+
+    ```
+    New-MaizeyChat -maizeyProjectId "your-project-id" -prompt "your-question-here" -apiKey "your-api-key"       
+    ```                      
+  
+## Python Example
+
+1. Copy `.env.example` to `.env` and fill in your credentials:
+
+    ```
+    cp .env.example .env
+    ```
+
+    | Variable | Description |
+    |----------|-------------|
+    | `token` | Your Maizey API token |
+
+2. Fill in the project_pk variable in maizeyapi.py with your Maizey Project ID.
+3. Replace the query in maizeyapi.py with whatever you would like to ask Maizey. 
