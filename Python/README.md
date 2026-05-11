@@ -17,7 +17,7 @@ cp .env.example .env
 | `MODEL` | Model to use for text examples |
 | `IMAGE_MODEL` | Model to use for image generation (`python-image.py`) |
 | `EMBEDDING_MODEL` | Model to use for embeddings (`python-embeddings.py`) |
-| `REASONING_MODEL` | Model to use for reasoning (`python-reasoning.py`) |
+| `REASONING_MODEL` | Model to use for reasoning (`python-.py`) |
 
 Run `get_models.py` to see all available model names.
 
@@ -27,12 +27,12 @@ Run `get_models.py` to see all available model names.
 |--------|-------------|
 | `python-responses.py` | Basic request using the Responses API (recommended) |
 | `python-chat.py` | Basic request using the Chat Completions API |
-| `python-reasoning.py` | Reasoning model using the `reasoning.effort` parameter |
-| `python-structured.py` | Structured output enforced with a Pydantic JSON Schema |
 | `python_json.py` | JSON object output mode |
+| `python-structured.py` | Structured output enforced with a Pydantic JSON Schema |
 | `python-vision.py` | Analyze an image via URL or a base64-encoded local file |
-| `python-embeddings.py` | Generate text embeddings and learn what they can be used for |
-| `python-image.py` | Generate an image with DALL-E, saved as a PNG |
-| `get_models.py` | List all available models grouped by provider |
 | `python-langchain.py` | Use the gateway through the LangChain framework |
 | `python-ner.py` | Named Entity Recognition (NER) using few-shot prompting |
+| `python-image.py` | Generate an image saved as a PNG |
+| `python-embeddings.py` | Generate text embeddings and learn what they can be used for |
+| `python-reasoning.py` | Reasoning model using the `reasoning.effort` parameter |
+| `get_models.py` | List all available models grouped by provider |
