@@ -18,7 +18,7 @@ After opening your project, click the **API Config** tab and then click the **Do
 
 ![Getting Started](../docs/img/4documentation.png)
 
-The following page displays, detailing Maizey’s API schema and allowing developers to try it out. To begin, click **Authorize** and paste your token in. Then, open the first collapsible panel. This endpoint allows you to create a conversation in Maizey.
+A page detailing Maizey’s API schema and allowing developers to try it out displays. To begin, click **Authorize** and paste your token in. Then, open the first collapsible panel. This endpoint allows you to create a conversation in Maizey.
 
 ![Getting Started](../docs/img/5authorize.png)
 ![Getting Started](../docs/img/6maizey_conversation.png)
