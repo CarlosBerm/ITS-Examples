@@ -9,7 +9,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 url = 'https://umgpt.umich.edu/maizey/api'
 
-# Fill in the below project_pk with your Maizey Project ID!
+# Fill in the below project_pk with your Maizey App ID!
 project_pk = ''
 
 # Load environment variable (API key) from the .env file.
