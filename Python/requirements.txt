@@ -17,6 +17,7 @@ langsmith==0.8.3
 openai==2.36.0
 orjson==3.11.9
 packaging==26.2
+pandas==2.3.3
 pydantic==2.13.4
 pydantic_core==2.46.4
 python-dotenv==1.2.2
