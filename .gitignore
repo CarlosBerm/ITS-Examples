@@ -163,3 +163,9 @@ node_modules/
 Maizey_API/maizeyapi_test.py
 python-test.py
 Python/test_examples.py
+
+# Google service account keys / OAuth secrets (never commit these)
+service_account.json
+credentials.json
+client_secret*.json
+token.json

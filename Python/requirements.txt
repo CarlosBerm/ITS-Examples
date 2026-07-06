@@ -35,3 +35,17 @@ urllib3==2.7.0
 uuid_utils==0.14.1
 xxhash==3.7.0
 zstandard==0.25.0
+
+# Google Sheets API (Scripts/sheets_handler.py)
+google-api-python-client==2.198.0
+google-auth==2.55.1
+google-auth-httplib2==0.4.0
+google-api-core==2.31.0
+googleapis-common-protos==1.75.0
+httplib2==0.32.0
+proto-plus==1.28.0
+protobuf==7.35.1
+pyasn1==0.6.3
+pyasn1_modules==0.4.2
+pyparsing==3.3.2
+uritemplate==4.2.0
