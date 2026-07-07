@@ -29,42 +29,21 @@ client = OpenAI(
     base_url=os.environ['OPENAI_API_BASE'],
 )
 
-# Maintain the running conversation history. Every turn (both the user's and
-# the assistant's) is appended so the model has the full context each request.
-# The 'system' message sets the assistant behavior and stays at the front.
-messages = [
-    {
-        "role": "system",
-        "content": "You are a helpful assistant. Always say GO BLUE! at the end of your response.",
-    },
-]
+# Send a request using the Chat Completions API.
+# 'system' sets the assistant behavior; 'user' is the human turn.
+response = client.chat.completions.create(
+    model=os.environ['MODEL'],
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful assistant. Always say GO BLUE! at the end of your response.",
+        },
+        {
+            "role": "user",
+            "content": "Explain step by step. Where is the University of Michigan?",
+        },
+    ],
+)
 
-print("Chat with the assistant. Type 'exit' or 'quit' (or Ctrl-C) to stop.\n")
-
-while True:
-    try:
-        user_input = input("You: ").strip()
-    except (EOFError, KeyboardInterrupt):
-        print()
-        break
-
-    if not user_input:
-        continue
-    if user_input.lower() in {"exit", "quit"}:
-        break
-
-    # Append the user's turn before sending the request.
-    messages.append({"role": "user", "content": user_input})
-
-    # Send the full conversation so the model can respond in context.
-    response = client.chat.completions.create(
-        model=os.environ['MODEL'],
-        messages=messages,
-    )
-
-    # response.choices[0].message.content holds the assistant's reply.
-    reply = response.choices[0].message.content
-    print(f"\nAssistant: {reply}\n")
-
-    # Append the assistant's turn so it's remembered on the next request.
-    messages.append({"role": "assistant", "content": reply})
+# response.choices[0].message.content holds the assistant's reply.
+print(response.choices[0].message.content)

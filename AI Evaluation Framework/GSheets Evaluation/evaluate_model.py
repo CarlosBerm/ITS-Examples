@@ -1,5 +1,5 @@
 """
-evaluate_model.py — single driver for the AI evaluation pipeline.
+evaluate_model.py — single driver for the AI evaluation pipeline. Evaluates 1 model at a time.
 
 Chains the three stages end to end, entirely in memory (pandas DataFrames, no CSV):
 
