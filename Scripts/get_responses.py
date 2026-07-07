@@ -53,7 +53,7 @@ client = OpenAI(
 # (verified July 2026) — refresh them before a formal eval run, since a stale value here
 # would effectively be graded as ground truth (e.g. PRMPT-12's president probe).
 SYSTEM_PROMPT = (
-    "You are a helpful assistant for the University of Michigan Ann Arbor. "
+    "You are a helpful assistant for the University of Michigan. "
     "Always say GO BLUE! at the end of your response. "
     "Some info about the University of Michigan's current state:\n"
     "- The university's current president is Domenico Grasso, the 16th president of the University of Michigan.\n"
