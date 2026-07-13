@@ -14,7 +14,7 @@ come from and where responses go:
 | Responses written to | tabs in the same Google Sheet                   | a **local file**                   |
 | Extra setup          | Google Cloud service account + shared sheet     | none — just an API key             |
 | Best for             | the team's shared, graded, dashboarded workflow | quick, offline, standalone runs    |
-| Status               | ✅ built & tested                               | 🚧 setup ready, runner in progress |
+| Status               | ✅ built & tested                               | ✅ built & tested                   |
 
 > **Setting up or running a mode?** Each folder has its own README with the exact steps:
 > [`GSheets Evaluation/README.md`](GSheets%20Evaluation/README.md) ·
@@ -88,8 +88,15 @@ The core is three stages, chained entirely in memory:
   responses; only an unexpected stage failure (e.g. a bad key) skips a single model, so one
   hiccup never kills the batch. A written/skipped summary prints at the end.
 
-**Local Evaluation** reuses the same "ask the model" stage but swaps the Google Sheet for local
-files at both ends. _(Runner code is in progress.)_
+**Local Evaluation** offers the **same two drivers** (`evaluate_model.py` and
+`batch_evaluate_models.py`) built on the **same three stages** — it just swaps the Google Sheet
+for a local `.xlsx` workbook at both ends, reading and writing it with `openpyxl` instead of the
+Sheets API. No Google Cloud, no service account: a `LOCAL_WORKBOOK` path in `.env` replaces the
+sheet ID and the service-account key. The writer is held to the same standard as the GSheets one
+— it finds the `Prompt ID` and `Model Output Response` columns by header name, overwrites in
+place (clearing stale rows), stores responses as literal text so a leading `=` never becomes a
+formula, and preserves every auto-computed column and dashboard (marking the file to recalculate
+when it's next opened).
 
 ---
 
@@ -112,8 +119,14 @@ AI Evaluation Framework/
 │   ├── requirements.txt
 │   └── .env.example
 │
-└── Local Evaluation/               ← evaluate against local files  (in progress)
+└── Local Evaluation/               ← evaluate against a local .xlsx workbook  (built)
     ├── README.md                     setup & how to run this mode
+    ├── evaluate_model.py             one model  → one tab   (driver)
+    ├── batch_evaluate_models.py      many models → many tabs (driver)
+    ├── get_prompts.py                stage 1: read Prompt Repository tab (+ shared workbook helpers)
+    ├── get_responses.py              stage 2: run prompts through the model (identical to GSheets)
+    ├── populate_model_tab.py         stage 3: write responses back to a tab
+    ├── get_model_directory.py        read the Model Directory tab + tab-existence check
     ├── requirements.txt
     └── .env.example
 ```
