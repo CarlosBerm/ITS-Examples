@@ -87,7 +87,7 @@ def main():
     for i, (model_id, tab) in enumerate(valid, start=1):
         print(f"===== [{i}/{total_models}] Evaluating '{model_id}' -> '{tab}' =====")
         try:
-            responses_df = get_responses_df(prompts_df, model_id)
+            responses_df = get_responses_df(prompts_df, model_id, tab)
             populate_model_tab(responses_df, tab)
             results.append((model_id, tab, "ok", f"{len(responses_df)} rows written"))
         except SystemExit as e:

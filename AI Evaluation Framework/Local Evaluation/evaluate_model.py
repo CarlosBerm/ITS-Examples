@@ -35,7 +35,7 @@ def main():
     prompts_df = get_prompts_df(PROMPT_REPOSITORY_TAB)
     print(f"  loaded {len(prompts_df)} prompt(s).\n")
 
-    responses_df = get_responses_df(prompts_df, MODEL)
+    responses_df = get_responses_df(prompts_df, MODEL, MODEL_OUTPUT_TAB)
 
     print(f"\nWriting {len(responses_df)} response(s) to '{MODEL_OUTPUT_TAB}'...")
     populate_model_tab(responses_df, MODEL_OUTPUT_TAB)

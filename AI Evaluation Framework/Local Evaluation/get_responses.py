@@ -8,7 +8,7 @@ a Google Sheet there) and where the responses go differs between the two modes �
 logic in the middle is the same, so results stay comparable across modes.
 
 Pulls the prompt library via get_prompts.get_prompts_df(), then walks the prompts in order
-and asks each one to the model configured in .env (the U-M GPT Toolkit gateway). Two things
+and asks each one to the model configured in .env (the U-M GPT Toolkit gateway). Three things
 make this more than a simple loop:
 
   * Context retention — every turn shares ONE running conversation, so prompts that probe
@@ -22,9 +22,16 @@ make this more than a simple loop:
     simply refusing). Each call is wrapped so one bad prompt is recorded and the run continues
     instead of aborting.
 
-Exposes get_responses_df(prompts_df, model) -> DataFrame with columns 'Prompt ID' and
-'Model Output Response'. Run standalone (reads PROMPT_REPOSITORY_TAB + MODEL from .env) for a
-quick check, or import it into the evaluate_model.py / batch_evaluate_models.py drivers.
+  * Reasoning mode — models whose RESULTS TAB name contains the word "Reasoning" (e.g.
+    "Claude Opus 4.6 (Reasoning)") are called with the gateway's reasoning turned up to its
+    highest setting (reasoning_effort="high"); every other model is called with no reasoning
+    parameter at all, i.e. the gateway default. The same base model can therefore be evaluated
+    both ways just by pointing it at a plain tab vs. a "(Reasoning)" tab.
+
+Exposes get_responses_df(prompts_df, model, model_tab_name="") -> DataFrame with columns
+'Prompt ID' and 'Model Output Response'. Reasoning is decided from model_tab_name. Run standalone
+(reads PROMPT_REPOSITORY_TAB + MODEL + MODEL_OUTPUT_TAB from .env) for a quick check, or import it
+into the evaluate_model.py / batch_evaluate_models.py drivers.
 """
 
 import os
@@ -86,13 +93,22 @@ PROMPT_ID_COLUMN = "Prompt ID"
 PROMPT_TEXT_COLUMN = "Prompt Text"
 RESPONSE_COLUMN = "Model Output Response"
 
+# A results tab whose name contains this word (case-insensitive) is evaluated with reasoning
+# turned up to its highest setting; every other model is called with no reasoning parameter.
+REASONING_TAB_KEYWORD = "reasoning"
 
-def get_responses_df(prompts_df, model):
+
+def get_responses_df(prompts_df, model, model_tab_name=""):
     """Send every prompt in `prompts_df` to `model` and return a responses DataFrame with
     columns 'Prompt ID' and 'Model Output Response'.
 
     All prompts share ONE running conversation (context retention), and per-prompt failures
     (e.g. policy rejections on injection prompts) are recorded rather than aborting the run.
+
+    If `model_tab_name` contains the word "Reasoning" (case-insensitive), every call is made
+    with reasoning_effort="high"; otherwise no reasoning parameter is sent and the gateway uses
+    its default. The flag is derived once from the tab name because a run evaluates a single
+    model into a single tab.
     """
     for column in (PROMPT_ID_COLUMN, PROMPT_TEXT_COLUMN):
         if column not in prompts_df.columns:
@@ -108,7 +124,10 @@ def get_responses_df(prompts_df, model):
         print("No prompts to send.", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Sending {total} prompt(s) to model '{model}'...\n")
+    # Decide reasoning once from the tab name — a run is one model into one tab.
+    use_reasoning = REASONING_TAB_KEYWORD in (model_tab_name or "").lower()
+    mode = "highest reasoning effort" if use_reasoning else "default — no reasoning parameter"
+    print(f"Sending {total} prompt(s) to model '{model}' [{mode}]...\n")
 
     # One shared conversation gives the model memory across all prompts. It starts with the
     # system message and grows by one user + one assistant message per prompt.
@@ -126,10 +145,11 @@ def get_responses_df(prompts_df, model):
         conversation.append({"role": "user", "content": prompt_text})
 
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=conversation,
-            )
+            request_kwargs = {"model": model, "messages": conversation}
+            if use_reasoning:
+                # Turn the gateway's reasoning up to its highest setting for "(Reasoning)" tabs.
+                request_kwargs["reasoning_effort"] = "high"
+            response = client.chat.completions.create(**request_kwargs)
             answer = response.choices[0].message.content
             if not answer:
                 # A content-filtered completion can come back with empty content.
@@ -160,10 +180,11 @@ def get_responses_df(prompts_df, model):
 def main():
     # Standalone debugging: read the prompt tab + model from .env, run prompts -> responses,
     # and print the result. The drivers (evaluate_model.py / batch_evaluate_models.py) are the
-    # real entry points.
+    # real entry points. MODEL_OUTPUT_TAB drives the reasoning decision, matching the drivers.
     tab_name = os.environ.get("PROMPT_REPOSITORY_TAB", "Prompt Repository").strip()
     prompts_df = get_prompts_df(tab_name)
-    responses_df = get_responses_df(prompts_df, os.environ["MODEL"])
+    model_tab_name = os.environ.get("MODEL_OUTPUT_TAB", "")
+    responses_df = get_responses_df(prompts_df, os.environ["MODEL"], model_tab_name)
     print(f"DONE! Generated {len(responses_df)} response(s).\n")
     print(responses_df.to_string(index=False))
 

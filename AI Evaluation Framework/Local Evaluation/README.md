@@ -88,6 +88,16 @@ python get_prompts.py           # print the prompts it would send
 python get_model_directory.py   # print the models a batch run would evaluate
 ```
 
+### Reasoning mode (automatic)
+
+If a model's **results tab name contains the word "Reasoning"** (e.g. `GPT-5-mini (Reasoning)`,
+`Claude Opus 4.6 (Reasoning)`), every call for that model is made with the gateway's reasoning at
+its **highest** setting (`reasoning_effort="high"`). Any other tab is called with **no reasoning
+parameter** — the gateway default. So the same base model can be evaluated both ways just by
+giving it a plain tab and a "(Reasoning)" tab: set `MODEL_OUTPUT_TAB` to the "(Reasoning)" tab for
+one model, or list both tabs in the Model Directory for a batch run. The console line
+`... [highest reasoning effort]` vs `... [default — no reasoning parameter]` shows which was used.
+
 ## Troubleshooting
 
 | Symptom                                          | Likely cause & fix                                                             |

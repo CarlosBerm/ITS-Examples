@@ -44,6 +44,11 @@ come from and where responses go:
 - **Current facts are injected into the system prompt.** Web-verified 2026 U-M facts (president,
   enrollment, endowment, coach, latest championship) are supplied so models with older training
   cutoffs are graded against _today's_ ground truth instead of stale memorized data.
+- **Reasoning is toggled per model by the tab name.** A model whose results tab name contains
+  "Reasoning" is evaluated with the gateway's reasoning at its highest setting
+  (`reasoning_effort="high"`); every other model runs at the gateway default (no reasoning
+  parameter). The same base model can thus be compared with and without reasoning just by pointing
+  it at a plain tab vs. a "(Reasoning)" tab — no code change.
 - **Adversarial prompts never abort a run.** Prompt-injection / policy-breaking test cases can
   make the gateway reject a request. Each call is wrapped so the failure is recorded **as that
   prompt's response** and the run keeps going.
@@ -73,8 +78,9 @@ The core is three stages, chained entirely in memory:
   keeps only rows with a non-empty `Prompt Text`, and returns a DataFrame.
 - **`get_responses.py`** — sends every prompt to the model over the gateway in one continuous
   conversation (with the current-facts system prompt and context-retention guardrail), catching
-  per-prompt errors and recording them as the response. Returns a DataFrame of `Prompt ID` +
-  `Model Output Response`.
+  per-prompt errors and recording them as the response. If the model's target tab name contains
+  "Reasoning", it turns reasoning up to its highest setting for that run. Returns a DataFrame of
+  `Prompt ID` + `Model Output Response`.
 - **`populate_model_tab.py`** — writes those two columns back into a model's results tab by
   header name (overwrite-in-place, formula-safe).
 
